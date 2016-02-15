@@ -16,83 +16,106 @@ public class WangMendel {
 	private DataSource dados;
 	private Instances instancias;
 	private int quantRegioes;
-	private List<Atributo> listaAtributos;
+	private ArrayList<Atributo> listaAtributos;
 	
 	
 	public WangMendel(DataSource dados, int quantRegioes) throws Exception{
 		this.dados = dados;
 		this.quantRegioes = quantRegioes;
 		this.instancias = dados.getDataSet();
-		this.geralistaAtributos();
 	}
 	
 	public void gerarRegras() throws Exception{
 		
+		this.gerarlistaAtributos();
+		
+		//Armazena o indice do atributo que corresponde a classe. Aqui considero que é sempre o último atributo.
+		int indiceClasse = dados.getDataSet().numAttributes() - 1; 
+		
 		for (Instance instancia : instancias) {
 			
-			for (int i = 0; i < instancia.numAttributes(); i++) {
-
-				Attribute atributo = instancia.attribute(i);	
+			List<ConjuntoFuzzy> antecedentes = new ArrayList<ConjuntoFuzzy>();
+			String consequente = instancia.stringValue(indiceClasse);
+			//System.out.println("Classe: " + instancia.stringValue(indiceClasse));
+			
+			double grauRegra = 1; //Começa com 1 por ser um fator neutro na multiplicação
+			
+			//Pega cada atributo da instância
+			for (int i = 0; i < indiceClasse; i++) {
 				
-				System.out.println(atributo.name());
+				//System.out.println("Atributo: " + instancia.attribute(i).name());
+				//System.out.println("Valor: " + instancia.value(i));
+				double valor = instancia.value(i);
+				Atributo atributo  = getAtributoByName(instancia.attribute(i).name());
 				
-				break;
+				//Para cada atributo da instância, verifico o conjunto fuzzy de maior grau
+				double maiorGrau = Double.MIN_VALUE;
+				ConjuntoFuzzy conjuntoMaiorGrau = null;
+				
+				for (ConjuntoFuzzy conjunto : atributo.getConjuntosFuzzy(this.quantRegioes)) {	
+					double grau = conjunto.calculaPertinencia(valor);
+					System.out.println("grau: " + grau + " / maiorGrau: " + maiorGrau);
+					if(grau > maiorGrau){
+						maiorGrau = grau;
+						conjuntoMaiorGrau = conjunto;
+					}
+				}
+				
+				grauRegra *= maiorGrau;
+				System.out.println("Conjunto Fuzzy de maior grau: " + conjuntoMaiorGrau.getNomeAtributo());
+				//System.out.println("Conjunto Fuzzy de maior grau: " + conjuntoMaiorGrau.getIndiceConjunto() + " / Grau: " + maiorGrau);
+				
+				//Adiciono o conjunto fuzzy de maior grau no antecedente da regra
+				antecedentes.add(conjuntoMaiorGrau);
 					
 			}
 			
-			break;
+			//System.out.println("Grau da regra: " + grauRegra);
+			Regra regra = new Regra(antecedentes, consequente, grauRegra);
+			
 			
 		}
 		
 	}
 	
-	public List<ConjuntoFuzzy> getConjuntosFuzzy(int quantRegioes, String nomeAtributo, double valorMinimo, double valorMaximo) {
-		
-		System.out.println("=> Criando conjuntos fuzzy do atributo " + nomeAtributo);
-		List<ConjuntoFuzzy> conjuntosFuzzy = new ArrayList<ConjuntoFuzzy>();
-		//ConjuntoFuzzy conjunto = new ConjuntoFuzzy(atributo, limiteSuperior, limiteInferior)
-		double tamanhoDominio = valorMaximo - valorMinimo;
-		//System.out.println("Extensão do domínio: " + tamanhoDominio + "[" + this.limiteInferior + ", " + this.limiteSuperior + "]");
-		double range = tamanhoDominio/(quantRegioes - 1);
-		double inf = valorMinimo;
-		double sup = valorMinimo + range;
-		
-		//Definição dos limites das regiões de pertinencia triangular
-		for(int i = 0; i < quantRegioes; i++){
-			String nomeConjunto = new String(nomeAtributo + "(" + i + ")");
-			ConjuntoFuzzy conjunto = new ConjuntoFuzzy(nomeConjunto, inf, sup);
-			conjuntosFuzzy.add(conjunto);
-			//System.out.println("Conjunto: " + i + " [" + inf + ", " + sup + "]");
-			inf += range/2;
-			sup += range/2;
-		}
-		
-		//System.out.println("TAMANHO DA LISTA DE CONJ FUZZY DO ATRIBUTO: " + conjuntosFuzzy.size());
-		System.out.println("Conjuntos Fuzzy gerados com sucesso.");
-		
-		return conjuntosFuzzy;
-	}
-	
-	private void geralistaAtributos() throws Exception{
+	private void gerarlistaAtributos() throws Exception{
 		
 		this.listaAtributos = new ArrayList<Atributo>();
+		//listaAtributos = null;
 		
-		for (int i = 0; i < dados.getDataSet().numAttributes(); i++) {
+		for (int i = 0; i <= dados.getDataSet().numAttributes() - 1; i++) {// Considerando que o último atributo é sempre o atributo que corresponde a classe da instância, por isso usa-se o -1
 			
 			if(instancias.attribute(i).isNumeric()){
 				
 				AttributeStats as = instancias.attributeStats(i);
 				Stats s = as.numericStats;	
 				
-				System.out.println("Atributo: " + instancias.attribute(i).name());
+				/*System.out.println("Atributo: " + instancias.attribute(i).name());
 				System.out.println("Valor mínimo: " + s.min);
-				System.out.println("Valor máximo: " + s.max);
+				System.out.println("Valor máximo: " + s.max);*/
 				
 				Atributo atributo = new Atributo(instancias.attribute(i).name(), s.min, s.max);
 				listaAtributos.add(atributo);
 				
 			}	
-		}		
+		}
+
+	}
+	
+	private Atributo getAtributoByName(String nomeAtributo){
+		
+		Atributo atributo = null;
+		
+		for (Atributo a : listaAtributos) {
+			if(a.getNome().equals(nomeAtributo)){
+				atributo = a;
+				break;
+			}
+			
+		}
+		
+		return atributo;
+		
 	}
 
 }

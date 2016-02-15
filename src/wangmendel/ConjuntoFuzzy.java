@@ -5,12 +5,14 @@ public class ConjuntoFuzzy {
 	private String nomeAtributo;
 	private double limiteInferior;
 	private double limiteSuperior;
+	private int indiceConjunto;
 	
-	public ConjuntoFuzzy(String nomeAtributo, double limiteInferior, double limiteSuperior) {
+	public ConjuntoFuzzy(String nomeAtributo, double limiteInferior, double limiteSuperior, int indiceConjunto) {
 		
 		this.nomeAtributo = nomeAtributo;
 		this.limiteInferior = limiteInferior;
 		this.limiteSuperior = limiteSuperior;
+		this.indiceConjunto = indiceConjunto;
 		
 	}
 
@@ -38,6 +40,14 @@ public class ConjuntoFuzzy {
 		this.limiteSuperior = limiteSuperior;
 	}
 	
+	public int getIndiceConjunto() {
+		return indiceConjunto;
+	}
+
+	public void setIndiceConjunto(int indiceConjunto) {
+		this.indiceConjunto = indiceConjunto;
+	}
+
 	//Calculo da pertinência triangular
 	public double calculaPertinencia(double x){
 		//System.out.println("Calculando pertinência no conjunto " + this.indiceConjunto);

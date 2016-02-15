@@ -2,15 +2,13 @@ package wangmendel;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import wang.mendel.ConjuntoFuzzy;
+import wangmendel.ConjuntoFuzzy;
 
 public class Atributo {
 	
 	private String nome;
 	private double valorMaximo;
 	private double valorMinimo;
-	private List<ConjuntoFuzzy> conjuntosFuzzy;
 	
 	public Atributo(String nome, double valorMinimo, double valorMaximo){
 		
@@ -46,7 +44,7 @@ public class Atributo {
 
 	public List<ConjuntoFuzzy> getConjuntosFuzzy(int quantRegioes) {
 		
-		System.out.println("=> Criando conjuntos fuzzy do atributo " + this.nome);
+		//System.out.println("=> Criando conjuntos fuzzy do atributo " + this.nome);
 		List<ConjuntoFuzzy> conjuntosFuzzy = new ArrayList<ConjuntoFuzzy>();
 		//ConjuntoFuzzy conjunto = new ConjuntoFuzzy(atributo, limiteSuperior, limiteInferior)
 		double tamanhoDominio = this.valorMaximo - this.valorMinimo;
@@ -58,21 +56,17 @@ public class Atributo {
 		//Definição dos limites das regiões de pertinencia triangular
 		for(int i = 0; i < quantRegioes; i++){
 			String nomeConjunto = new String(this.nome + "(" + i + ")");
-			ConjuntoFuzzy conjunto = new ConjuntoFuzzy(nomeConjunto, inf, sup);
-			this.conjuntosFuzzy.add(conjunto);
+			ConjuntoFuzzy conjunto = new ConjuntoFuzzy(nomeConjunto, inf, sup, i);
+			conjuntosFuzzy.add(conjunto);
 			//System.out.println("Conjunto: " + i + " [" + inf + ", " + sup + "]");
 			inf += range/2;
 			sup += range/2;
 		}
 		
 		//System.out.println("TAMANHO DA LISTA DE CONJ FUZZY DO ATRIBUTO: " + conjuntosFuzzy.size());
-		System.out.println("Conjuntos Fuzzy gerados com sucesso.");
+		//System.out.println("Conjuntos Fuzzy gerados com sucesso.");
 		
-		return this.conjuntosFuzzy;
-	}
-
-	public void setConjuntosFuzzy(List<ConjuntoFuzzy> conjuntosFuzzy) {
-		this.conjuntosFuzzy = conjuntosFuzzy;
+		return conjuntosFuzzy;
 	}
 
 }
