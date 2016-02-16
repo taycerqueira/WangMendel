@@ -2,6 +2,7 @@ package wangmendel;
 
 
 import weka.core.converters.ConverterUtils.DataSource;
+import java.util.ArrayList;
 import weka.core.Instances;
 
 public class Main {
@@ -22,7 +23,8 @@ public class Main {
 		    //System.out.println(D.toString());
 		    int quantConjuntosNebulosos = 3;
 		    WangMendel wm = new WangMendel(source, quantConjuntosNebulosos);
-		    wm.gerarRegras();
+		    ArrayList<Regra> regras = wm.gerarRegras();
+		    System.out.println("Quantidade de regras geradas: " + regras.size());
 		    
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

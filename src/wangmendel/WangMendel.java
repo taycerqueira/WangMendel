@@ -2,11 +2,8 @@ package wangmendel;
 
 import weka.core.converters.ConverterUtils.DataSource;
 import weka.experiment.Stats;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import weka.core.Attribute;
 import weka.core.AttributeStats;
 import weka.core.Instance;
 import weka.core.Instances;
@@ -25,9 +22,10 @@ public class WangMendel {
 		this.instancias = dados.getDataSet();
 	}
 	
-	public void gerarRegras() throws Exception{
+	public ArrayList<Regra> gerarRegras() throws Exception{
 		
 		this.gerarlistaAtributos();
+		ArrayList<Regra> regras = new ArrayList<Regra>();
 		
 		//Armazena o indice do atributo que corresponde a classe. Aqui considero que é sempre o último atributo.
 		int indiceClasse = dados.getDataSet().numAttributes() - 1; 
@@ -36,25 +34,21 @@ public class WangMendel {
 			
 			List<ConjuntoFuzzy> antecedentes = new ArrayList<ConjuntoFuzzy>();
 			String consequente = instancia.stringValue(indiceClasse);
-			//System.out.println("Classe: " + instancia.stringValue(indiceClasse));
 			
 			double grauRegra = 1; //Começa com 1 por ser um fator neutro na multiplicação
 			
 			//Pega cada atributo da instância
 			for (int i = 0; i < indiceClasse; i++) {
 				
-				//System.out.println("Atributo: " + instancia.attribute(i).name());
-				//System.out.println("Valor: " + instancia.value(i));
 				double valor = instancia.value(i);
 				Atributo atributo  = getAtributoByName(instancia.attribute(i).name());
 				
 				//Para cada atributo da instância, verifico o conjunto fuzzy de maior grau
-				double maiorGrau = Double.MIN_VALUE;
+				double maiorGrau = Double.NEGATIVE_INFINITY;
 				ConjuntoFuzzy conjuntoMaiorGrau = null;
 				
 				for (ConjuntoFuzzy conjunto : atributo.getConjuntosFuzzy(this.quantRegioes)) {	
 					double grau = conjunto.calculaPertinencia(valor);
-					System.out.println("grau: " + grau + " / maiorGrau: " + maiorGrau);
 					if(grau > maiorGrau){
 						maiorGrau = grau;
 						conjuntoMaiorGrau = conjunto;
@@ -62,26 +56,48 @@ public class WangMendel {
 				}
 				
 				grauRegra *= maiorGrau;
-				System.out.println("Conjunto Fuzzy de maior grau: " + conjuntoMaiorGrau.getNomeAtributo());
-				//System.out.println("Conjunto Fuzzy de maior grau: " + conjuntoMaiorGrau.getIndiceConjunto() + " / Grau: " + maiorGrau);
 				
 				//Adiciono o conjunto fuzzy de maior grau no antecedente da regra
 				antecedentes.add(conjuntoMaiorGrau);
 					
 			}
 			
-			//System.out.println("Grau da regra: " + grauRegra);
-			Regra regra = new Regra(antecedentes, consequente, grauRegra);
-			
+			//Verfico se já existe alguma regra com os mesmos antecedentes
+			int quantAtributosAntecedentes = dados.getDataSet().numAttributes() - 1;
+			for (Regra r1 : regras) {
+				int cont = 0;
+				for(ConjuntoFuzzy a2 : antecedentes){
+					for(ConjuntoFuzzy a1 : r1.getAntecedentes()){
+						if(a2.equals(a1)){
+							cont++;
+						}
+					}
+				}
+				//Se todos os antecedentes forem iguais...
+				if(cont == quantAtributosAntecedentes){
+					System.out.println("Regra redundante encontrada");
+					if(grauRegra > r1.getGrau()){
+						regras.remove(r1);
+						Regra regra = new Regra(antecedentes, consequente, grauRegra);
+						regras.add(regra);
+					}
+				}
+				else{
+					Regra regra = new Regra(antecedentes, consequente, grauRegra);
+					regras.add(regra);
+				}
+				
+			}
 			
 		}
+
+		return regras;
 		
 	}
 	
 	private void gerarlistaAtributos() throws Exception{
 		
 		this.listaAtributos = new ArrayList<Atributo>();
-		//listaAtributos = null;
 		
 		for (int i = 0; i <= dados.getDataSet().numAttributes() - 1; i++) {// Considerando que o último atributo é sempre o atributo que corresponde a classe da instância, por isso usa-se o -1
 			
