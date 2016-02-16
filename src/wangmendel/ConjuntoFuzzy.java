@@ -2,26 +2,26 @@ package wangmendel;
 
 public class ConjuntoFuzzy {
 	
-	private String nomeAtributo;
+	private String idConjunto;
 	private double limiteInferior;
 	private double limiteSuperior;
 	private int indiceConjunto;
 	
-	public ConjuntoFuzzy(String nomeAtributo, double limiteInferior, double limiteSuperior, int indiceConjunto) {
+	public ConjuntoFuzzy(String idConjunto, double limiteInferior, double limiteSuperior, int indiceConjunto) {
 		
-		this.nomeAtributo = nomeAtributo;
+		this.idConjunto = idConjunto;
 		this.limiteInferior = limiteInferior;
 		this.limiteSuperior = limiteSuperior;
 		this.indiceConjunto = indiceConjunto;
 		
 	}
 
-	public String getNomeAtributo() {
-		return nomeAtributo;
+	public String getIdConjunto() {
+		return idConjunto;
 	}
 
-	public void setNomeAtributo(String nomeAtributo) {
-		this.nomeAtributo = nomeAtributo;
+	public void setIdConjuno(String idConjunto) {
+		this.idConjunto = idConjunto;
 	}
 
 	public double getLimiteInferior() {

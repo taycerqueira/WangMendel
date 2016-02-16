@@ -64,25 +64,47 @@ public class WangMendel {
 			
 			//Verfico se já existe alguma regra com os mesmos antecedentes
 			int quantAtributosAntecedentes = dados.getDataSet().numAttributes() - 1;
-			for (Regra r1 : regras) {
-				int cont = 0;
-				for(ConjuntoFuzzy a2 : antecedentes){
-					for(ConjuntoFuzzy a1 : r1.getAntecedentes()){
-						if(a2.equals(a1)){
-							cont++;
+			//System.out.println(regras.size());
+			
+			if(regras.isEmpty()){
+				//System.out.println("lista de regras vazia");
+				Regra regra = new Regra(antecedentes, consequente, grauRegra);
+				regras.add(regra);	
+				
+			}
+			else{
+				//System.out.println("lista nao vazia");
+				boolean naoExiste = true;
+				for (Regra r1 : regras) {
+					//System.out.println("tay2");
+					int cont = 0;
+					//System.out.println(antecedentes.size());
+					for(ConjuntoFuzzy a2 : antecedentes){
+						//System.out.println("oioi");
+						for(ConjuntoFuzzy a1 : r1.getAntecedentes()){
+							//System.out.println(a2.getIdConjunto() + " / " + a1.getIdConjunto());
+							if(a2.getIdConjunto().equals(a1.getIdConjunto())){
+								cont++;
+							}
 						}
 					}
-				}
-				//Se todos os antecedentes forem iguais...
-				if(cont == quantAtributosAntecedentes){
-					System.out.println("Regra redundante encontrada");
-					if(grauRegra > r1.getGrau()){
-						regras.remove(r1);
-						Regra regra = new Regra(antecedentes, consequente, grauRegra);
-						regras.add(regra);
+					//System.out.println("cont = " + cont + " / qntAtriAnt = " + quantAtributosAntecedentes);
+					//Se todos os antecedentes forem iguais...
+					if(cont == quantAtributosAntecedentes){
+						//System.out.println("Regra redundante encontrada");
+						if(grauRegra > r1.getGrau()){
+							naoExiste = false;
+							regras.remove(r1);
+							Regra regra = new Regra(antecedentes, consequente, grauRegra);
+							regras.add(regra);
+							break;
+
+						}
 					}
+					
 				}
-				else{
+				if(naoExiste){
+					//System.out.println("não existe");
 					Regra regra = new Regra(antecedentes, consequente, grauRegra);
 					regras.add(regra);
 				}
