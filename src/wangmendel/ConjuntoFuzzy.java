@@ -3,12 +3,14 @@ package wangmendel;
 public class ConjuntoFuzzy {
 	
 	private String idConjunto;
+	private String nomeAtributo;
 	private double limiteInferior;
 	private double limiteSuperior;
 	private int indiceConjunto;
 	
-	public ConjuntoFuzzy(String idConjunto, double limiteInferior, double limiteSuperior, int indiceConjunto) {
+	public ConjuntoFuzzy(String nomeAtributo, String idConjunto, double limiteInferior, double limiteSuperior, int indiceConjunto) {
 		
+		this.nomeAtributo = nomeAtributo;
 		this.idConjunto = idConjunto;
 		this.limiteInferior = limiteInferior;
 		this.limiteSuperior = limiteSuperior;
@@ -18,6 +20,10 @@ public class ConjuntoFuzzy {
 
 	public String getIdConjunto() {
 		return idConjunto;
+	}
+
+	public String getNomeAtributo() {
+		return nomeAtributo;
 	}
 
 	public double getLimiteInferior() {

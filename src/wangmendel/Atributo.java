@@ -43,7 +43,7 @@ public class Atributo {
 		//Definição dos limites das regiões de pertinencia triangular
 		for(int i = 0; i < quantRegioes; i++){
 			String idConjunto = new String(this.nome + "-" + i);
-			ConjuntoFuzzy conjunto = new ConjuntoFuzzy(idConjunto, inf, sup, i);
+			ConjuntoFuzzy conjunto = new ConjuntoFuzzy(this.nome, idConjunto, inf, sup, i);
 			conjuntosFuzzy.add(conjunto);
 			//System.out.println("Conjunto: " + i + " [" + inf + ", " + sup + "]");
 			inf += range/2;
