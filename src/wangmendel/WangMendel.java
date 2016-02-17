@@ -20,11 +20,11 @@ public class WangMendel {
 		this.dados = dados;
 		this.quantRegioes = quantRegioes;
 		this.instancias = dados.getDataSet();
+		gerarlistaAtributos();
 	}
 	
 	public ArrayList<Regra> gerarRegras() throws Exception{
 		
-		this.gerarlistaAtributos();
 		ArrayList<Regra> regras = new ArrayList<Regra>();
 		
 		//Armazena o indice do atributo que corresponde a classe. Aqui considero que é sempre o último atributo.
@@ -47,7 +47,7 @@ public class WangMendel {
 				double maiorGrau = Double.NEGATIVE_INFINITY;
 				ConjuntoFuzzy conjuntoMaiorGrau = null;
 				
-				for (ConjuntoFuzzy conjunto : atributo.getConjuntosFuzzy(this.quantRegioes)) {	
+				for (ConjuntoFuzzy conjunto : atributo.getConjuntosFuzzy()) {	
 					double grau = conjunto.calculaPertinencia(valor);
 					if(grau > maiorGrau){
 						maiorGrau = grau;
@@ -114,7 +114,8 @@ public class WangMendel {
 		
 		this.listaAtributos = new ArrayList<Atributo>();
 		
-		for (int i = 0; i <= dados.getDataSet().numAttributes() - 1; i++) {// Considerando que o último atributo é sempre o atributo que corresponde a classe da instância, por isso usa-se o -1
+		//Considerando que o último atributo é sempre o atributo que corresponde a classe da instância, por isso usa-se o -1
+		for (int i = 0; i <= dados.getDataSet().numAttributes() - 1; i++) {
 			
 			if(instancias.attribute(i).isNumeric()){
 				
@@ -125,7 +126,7 @@ public class WangMendel {
 				System.out.println("Valor mínimo: " + s.min);
 				System.out.println("Valor máximo: " + s.max);*/
 				
-				Atributo atributo = new Atributo(instancias.attribute(i).name(), s.min, s.max);
+				Atributo atributo = new Atributo(instancias.attribute(i).name(), s.min, s.max, this.quantRegioes);
 				listaAtributos.add(atributo);
 				
 			}	
@@ -147,6 +148,10 @@ public class WangMendel {
 		
 		return atributo;
 		
+	}
+
+	public ArrayList<Atributo> getListaAtributos() {
+		return listaAtributos;
 	}
 
 }

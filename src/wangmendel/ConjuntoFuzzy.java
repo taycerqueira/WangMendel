@@ -37,6 +37,10 @@ public class ConjuntoFuzzy {
 	public int getIndiceConjunto() {
 		return indiceConjunto;
 	}
+	
+	public double getM(){
+		return (limiteSuperior + limiteInferior)/2;
+	}
 
 	//Calculo da pertinência triangular
 	public double calculaPertinencia(double x){
