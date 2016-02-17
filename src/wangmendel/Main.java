@@ -144,7 +144,7 @@ public class Main {
 	    	texto.print(" THEN ");
 	    	texto.print(nomeClasse);
 	    	texto.print(" IS ");
-	    	if(regra.getConsequente().equals("postive")){
+	    	if(regra.getConsequente().equals("positive")){
 	    		texto.print("1");
 	    	}
 	    	else if(regra.getConsequente().equals("negative")){
