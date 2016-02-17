@@ -64,36 +64,29 @@ public class WangMendel {
 			
 			//Verfico se já existe alguma regra com os mesmos antecedentes
 			int quantAtributosAntecedentes = dados.getDataSet().numAttributes() - 1;
-			//System.out.println(regras.size());
 			
 			if(regras.isEmpty()){
-				//System.out.println("lista de regras vazia");
 				Regra regra = new Regra(antecedentes, consequente, grauRegra);
 				regras.add(regra);	
-				
 			}
 			else{
-				//System.out.println("lista nao vazia");
-				boolean naoExiste = true;
+
+				boolean jaExiste = false;
 				for (Regra r1 : regras) {
-					//System.out.println("tay2");
 					int cont = 0;
-					//System.out.println(antecedentes.size());
 					for(ConjuntoFuzzy a2 : antecedentes){
-						//System.out.println("oioi");
 						for(ConjuntoFuzzy a1 : r1.getAntecedentes()){
-							//System.out.println(a2.getIdConjunto() + " / " + a1.getIdConjunto());
 							if(a2.getIdConjunto().equals(a1.getIdConjunto())){
 								cont++;
 							}
 						}
 					}
-					//System.out.println("cont = " + cont + " / qntAtriAnt = " + quantAtributosAntecedentes);
+
 					//Se todos os antecedentes forem iguais...
 					if(cont == quantAtributosAntecedentes){
-						//System.out.println("Regra redundante encontrada");
+						jaExiste = true;
+						//Verifico qual regra possui maior grau: a nova regra que estou tentando criar ou a que já existe na lista
 						if(grauRegra > r1.getGrau()){
-							naoExiste = false;
 							regras.remove(r1);
 							Regra regra = new Regra(antecedentes, consequente, grauRegra);
 							regras.add(regra);
@@ -103,8 +96,8 @@ public class WangMendel {
 					}
 					
 				}
-				if(naoExiste){
-					//System.out.println("não existe");
+				//Se não existe nenhuma regra igual a que estou tentando inserir, adiciono ela na lista
+				if(!jaExiste){
 					Regra regra = new Regra(antecedentes, consequente, grauRegra);
 					regras.add(regra);
 				}

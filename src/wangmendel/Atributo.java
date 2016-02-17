@@ -22,31 +22,18 @@ public class Atributo {
 		return nome;
 	}
 
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
 	public double getValorMaximo() {
 		return valorMaximo;
-	}
-
-	public void setValorMaximo(double valorMaximo) {
-		this.valorMaximo = valorMaximo;
 	}
 
 	public double getValorMinimo() {
 		return valorMinimo;
 	}
 
-	public void setValorMinimo(double valorMinimo) {
-		this.valorMinimo = valorMinimo;
-	}
-
 	public List<ConjuntoFuzzy> getConjuntosFuzzy(int quantRegioes) {
 		
 		//System.out.println("=> Criando conjuntos fuzzy do atributo " + this.nome);
 		List<ConjuntoFuzzy> conjuntosFuzzy = new ArrayList<ConjuntoFuzzy>();
-		//ConjuntoFuzzy conjunto = new ConjuntoFuzzy(atributo, limiteSuperior, limiteInferior)
 		double tamanhoDominio = this.valorMaximo - this.valorMinimo;
 		//System.out.println("Extensão do domínio: " + tamanhoDominio + "[" + this.limiteInferior + ", " + this.limiteSuperior + "]");
 		double range = tamanhoDominio/(quantRegioes - 1);
@@ -62,9 +49,6 @@ public class Atributo {
 			inf += range/2;
 			sup += range/2;
 		}
-		
-		//System.out.println("TAMANHO DA LISTA DE CONJ FUZZY DO ATRIBUTO: " + conjuntosFuzzy.size());
-		//System.out.println("Conjuntos Fuzzy gerados com sucesso.");
 		
 		return conjuntosFuzzy;
 	}

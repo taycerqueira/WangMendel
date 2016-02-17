@@ -20,32 +20,16 @@ public class ConjuntoFuzzy {
 		return idConjunto;
 	}
 
-	public void setIdConjuno(String idConjunto) {
-		this.idConjunto = idConjunto;
-	}
-
 	public double getLimiteInferior() {
 		return limiteInferior;
-	}
-
-	public void setLimiteInferior(double limiteInferior) {
-		this.limiteInferior = limiteInferior;
 	}
 
 	public double getLimiteSuperior() {
 		return limiteSuperior;
 	}
-
-	public void setLimiteSuperior(double limiteSuperior) {
-		this.limiteSuperior = limiteSuperior;
-	}
 	
 	public int getIndiceConjunto() {
 		return indiceConjunto;
-	}
-
-	public void setIndiceConjunto(int indiceConjunto) {
-		this.indiceConjunto = indiceConjunto;
 	}
 
 	//Calculo da pertinência triangular
