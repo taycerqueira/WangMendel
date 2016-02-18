@@ -18,7 +18,7 @@ public class Main {
 		
 		//importa a base de dados ARFF utilizando classes da Weka
 	    DataSource source;
-	    String nomeBase = "base-filmes";
+	    String nomeBase = "basefilmes";
 	    
 	    //Defina aqui a quantidade de conjuntos fuzzy que serão gerados pra cada atributo
 	    int quantConjuntosFuzzy = 3;  
@@ -103,6 +103,9 @@ public class Main {
 	    //Como o JFuzzyLogica só trabalha com números reais, utilizarei {1, -1}, onde 1 é positivo e -1 negativo.
 	    texto.println("\t TERM positive := 1;");
 	    texto.println("\t TERM negative := -1;");
+	    //texto.println("\t METHOD : COG;"); // Use 'Center Of Gravity' defuzzification method
+	    texto.println("\t METHOD : COGS;"); // Centre of Gravity for Singletons
+	    texto.println("\t DEFAULT := 0;"); // Default value is 0 (if no rule activates defuzzifier)
 	    texto.println("END_DEFUZZIFY\n");
 	    
 	    texto.println("RULEBLOCK No1");
@@ -144,12 +147,7 @@ public class Main {
 	    	texto.print(" THEN ");
 	    	texto.print(nomeClasse);
 	    	texto.print(" IS ");
-	    	if(regra.getConsequente().equals("positive")){
-	    		texto.print("1");
-	    	}
-	    	else if(regra.getConsequente().equals("negative")){
-	    		texto.print("-1");
-	    	}
+	    	texto.print(regra.getConsequente());
 	    	texto.print(";\n");
 	    	
 	    	contadorRegra++;
