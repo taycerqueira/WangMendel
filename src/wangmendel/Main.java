@@ -47,8 +47,8 @@ public class Main {
 		    //Gera o bloco de regras em um arquivo .txt
 		    //gerarRuleblock(regras, nomeBase, nomeClasse);
 		    
-		    //Gera arquivo .flc (fuzzy control language)
-		    gerarArquivoFlc(regras, nomeBase, nomeClasse, wm.getListaAtributos(), quantConjuntosFuzzy);   
+		    //Gera arquivo .fcl (fuzzy control language)
+		    gerarArquivoFcl(regras, nomeBase, nomeClasse, wm.getListaAtributos(), quantConjuntosFuzzy);   
 
 		    
 		} catch (Exception e) {
@@ -58,12 +58,12 @@ public class Main {
 
 	}
 	
-	private static void gerarArquivoFlc(ArrayList<Regra> regras, String nomeBase, String nomeClasse, ArrayList<Atributo> listaAtributos, int quantRegioesFuzzy) throws IOException{
+	private static void gerarArquivoFcl(ArrayList<Regra> regras, String nomeBase, String nomeClasse, ArrayList<Atributo> listaAtributos, int quantRegioesFuzzy) throws IOException{
 		
-	    System.out.println("=> Gerando arquivo .flc...");
+	    System.out.println("=> Gerando arquivo .fcl...");
 	    
-	    //Gerar arquivo contendo o RULEBLOCK para ser inserido em um arquivo .flc
-	    FileWriter arquivo = new FileWriter(nomeBase + ".flc"); 
+	    //Gerar arquivo contendo o RULEBLOCK para ser inserido em um arquivo .fcl
+	    FileWriter arquivo = new FileWriter(nomeBase + ".fcl"); 
 	    PrintWriter texto = new PrintWriter(arquivo);
 	    
 	    texto.println("FUNCTION_BLOCK " + nomeBase);
@@ -161,7 +161,7 @@ public class Main {
 	    texto.println("END_FUNCTION_BLOCK");
 	    
 	    arquivo.close();
-	    System.out.println("Arquivo .flc gerado com sucesso.");
+	    System.out.println("Arquivo .fcl gerado com sucesso.");
 		
 	}
 	
